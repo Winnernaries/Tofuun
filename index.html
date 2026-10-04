@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta property="og:image" content="">
-<meta property="og:title" content=" ">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>เต้าหู้</title>
@@ -57,33 +55,16 @@
  
   .stage {
     position: relative;
-    width: 300px;
-    height: 300px;
+    width: min(340px, 90vw);
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .stage::before {                  /* วงกลมสีอ่อนด้านหลังเต้าหู้ */
-    content: "";
-    position: absolute;
-    width: 270px;
-    height: 270px;
-    border-radius: 50%;
-    background: #f1eadc;
-  }
-  .stage::after {                   /* วงแหวนบางๆ */
-    content: "";
-    position: absolute;
-    width: 310px;
-    height: 310px;
-    border-radius: 50%;
-    border: 1px dashed #dccfb6;
-    animation: spin 40s linear infinite;
-  }
   .shadow {                         /* เงาใต้เต้าหู้ */
     position: absolute;
-    bottom: 38px;
-    width: 120px;
+    bottom: 22px;
+    width: 170px;
     height: 14px;
     border-radius: 50%;
     background: rgba(120, 95, 55, .15);
@@ -161,6 +142,142 @@
   .tofu-placeholder::before { left: 40px; }
   .tofu-placeholder::after  { right: 40px; }
  
+  /* ===== กรอบรูปแมว ===== */
+  @property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+  @keyframes borderspin { to { --a: 360deg; } }
+
+  .cat-frame {
+    position: relative;
+    z-index: 2;
+    width: min(250px, 64vw);
+    aspect-ratio: 1;
+    padding: 11px;
+    border-radius: 38px;
+    background: conic-gradient(from var(--a), #ffc9a0, #fff2a8, #c6f2b0, #a8e6ff, #e3c4ff, #ffc4dd, #ffc9a0);
+    box-shadow: 0 14px 30px rgba(150, 110, 60, .22), 0 0 0 5px #fff;
+    animation: borderspin 7s linear infinite, float 3s ease-in-out infinite;
+    transition: transform .3s;
+  }
+  .cat-frame:hover { rotate: -3deg; scale: 1.04; }
+
+  .cat-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #fff7ec;
+    box-shadow: inset 0 0 0 4px #fff;
+  }
+  .cat-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cat-inner::after {               /* แสงสะท้อนวิ่งผ่านรูป */
+    content: "";
+    position: absolute;
+    top: 0; left: -80%;
+    width: 50%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+    transform: skewX(-18deg);
+    animation: shine 5s ease-in-out infinite;
+  }
+  @keyframes shine {
+    0%, 60%  { left: -80%; }
+    100%     { left: 140%; }
+  }
+  .cat-fallback {                   /* แสดงเมื่อรูปแมวโหลดไม่ขึ้น */
+    display: none;
+    width: 100%; height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+  }
+
+  /* หูแมว */
+  .ear {
+    position: absolute;
+    top: -30px;
+    width: 62px;
+    height: 58px;
+    background: #f4c28f;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    z-index: -1;
+  }
+  .ear::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 24px;
+    width: 28px; height: 28px;
+    background: #ffb3c4;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    transform: translateX(-50%);
+  }
+  .ear.l { left: 20px;  transform: rotate(-14deg); transform-origin: bottom center; animation: wiggle 4s ease-in-out infinite; }
+  .ear.r { right: 20px; transform: rotate(14deg);  transform-origin: bottom center; animation: wiggle 4s ease-in-out infinite .4s reverse; }
+  @keyframes wiggle {
+    0%, 85%, 100% { translate: 0 0; }
+    90%           { translate: 0 -4px; }
+    95%           { translate: 0 1px; }
+  }
+
+  /* ตกแต่งรอบกรอบ */
+  .paw {
+    position: absolute;
+    z-index: 1;
+    font-size: 1.4rem;
+    opacity: .55;
+    pointer-events: none;
+    animation: bob 3.4s ease-in-out infinite;
+  }
+  .paw.p1 { top: 16%;    left: 16%; }
+  .paw.p2 { top: 22%;    right: 15%; animation-delay: .7s; }
+  .paw.p3 { bottom: 24%; left: 14%;  animation-delay: 1.4s; }
+  .paw.p4 { bottom: 20%; right: 17%; animation-delay: 2.1s; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-8deg); }
+    50%      { transform: translateY(-10px) rotate(8deg); }
+  }
+
+  /* ปุ่มหน้าต่อไป (สีเขียว) */
+  .next-btn {
+    position: relative;
+    z-index: 3;
+    margin-top: 22px;
+    padding: 14px 38px;
+    font-family: "Mali", "Sarabun", sans-serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: #fff;
+    background: linear-gradient(180deg, #74d86f, #3fb34b);
+    border: none;
+    border-radius: 999px;
+    box-shadow: 0 6px 0 #2e8a39, 0 14px 24px rgba(63, 179, 75, .32);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform .15s, box-shadow .15s;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  .next-btn::before {               /* แสงวิ่งผ่านปุ่ม */
+    content: "";
+    position: absolute;
+    top: 0; left: -70%;
+    width: 40%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.5), transparent);
+    transform: skewX(-20deg);
+    animation: shine 3.2s ease-in-out infinite;
+  }
+  .next-btn .arrow { display: inline-block; margin-left: 6px; animation: arrow 1.2s ease-in-out infinite; }
+  .next-btn:hover  { transform: translateY(-3px); box-shadow: 0 9px 0 #2e8a39, 0 18px 28px rgba(63, 179, 75, .38); }
+  .next-btn:active { transform: translateY(5px);  box-shadow: 0 1px 0 #2e8a39, 0 4px 10px rgba(63, 179, 75, .3); }
+  @keyframes pulse { 0%, 100% { scale: 1; } 50% { scale: 1.04; } }
+  @keyframes arrow { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+  #page-tofu.leaving { animation: pageOut .5s forwards; }
+  @keyframes pageOut { to { opacity: 0; transform: scale(.96); } }
+
   .text {
     margin-top: 26px;
     font-size: 1.6rem;
@@ -361,14 +478,19 @@
  
     <div class="stage">
       <div class="shadow"></div>
-      <div class="tofu-wrap" id="tofu">
-        <!-- 🧈 เต้าหู้น่ารักวาดด้วย SVG (ถ้าอยากใช้ GIF ของตัวเอง ลบ <svg> นี้ แล้วใส่ <img src="tofu.gif"> แทน) -->
-        <img src="meoww.jpg" alt=>
+      <div class="cat-frame">
+        <span class="ear l"></span><span class="ear r"></span>
+        <div class="cat-inner">
+          <!-- 🐱 รูปแมว (วางไฟล์ meoww.jpg ไว้โฟลเดอร์เดียวกับ index.html) -->
+          <img src="meoww.jpg" alt="แมว">
+        </div>
       </div>
     </div>
  
-    <div class="text">กดแมว</div>
-    <div class="hint"></div>
+    <button class="next-btn" id="next" type="button">หน้าต่อไป <span class="arrow">→</span></button>
+
+    <span class="paw p1">🐾</span><span class="paw p2">🐾</span>
+    <span class="paw p3">🐾</span><span class="paw p4">🐾</span>
   </div>
  
   <!-- ========== หน้า 2 : ดอกไม้ ========== -->
@@ -436,13 +558,13 @@
   </div>
  
 <script>
-  const tofu = document.getElementById('tofu');
+  const nextBtn = document.getElementById('next');
   const pageTofu = document.getElementById('page-tofu');
   const pageFlower = document.getElementById('page-flower');
  
-  // กดเต้าหู้ -> สลับไปหน้าดอกไม้
-  tofu.addEventListener('click', () => {
-    tofu.classList.add('clicked');
+  // กดปุ่มหน้าต่อไป -> สลับไปหน้าดอกไม้
+  nextBtn.addEventListener('click', () => {
+    pageTofu.classList.add('leaving');
     setTimeout(() => {
       pageTofu.classList.add('hidden');
       pageFlower.classList.remove('hidden');
